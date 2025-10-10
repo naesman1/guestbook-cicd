@@ -4,9 +4,8 @@ from app.main import app
 
 @pytest.fixture
 def client():
-    # Eliminar el comentario E501, E261, W291 para tener solo código limpio o hacerlo corto.
+
     app.config['TESTING'] = True
-    # E501 corregido haciendo el comentario corto
     app.config['REDIS_MASTER_SERVICE_HOST'] = 'localhost'  # Master HOST
     app.config['REDIS_MASTER_SERVICE_PORT'] = 6379  # Master PORT
     with app.test_client() as client:
@@ -18,7 +17,6 @@ def test_home_page_status(client):
     response = client.get('/')
     assert response.status_code == 200
     assert b"Libro de Visitas Profesional" in response.data
-
 
 def test_submit_email(client):
     """Prueba el envío del formulario de correo."""
