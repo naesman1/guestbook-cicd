@@ -26,6 +26,8 @@ def index():
         for e in redis_client.lrange('guestbook', 0, 9)
     ]
     return render_template('index.html', guest_emails=guest_emails)
+
+
 if __name__ == '__main__':
     # Ejecuta Flask en el puerto 5000
     app.run(host='0.0.0.0', port=5000)
