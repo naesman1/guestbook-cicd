@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from redis import Redis
 
 
-app = Flask(__name__)  # No hay error E302 aquí si ya está corregido
+app = Flask(__name__)
 
 
 # Configuración de Redis: usa las variables de entorno que K8s provee
