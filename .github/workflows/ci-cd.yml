@@ -117,14 +117,20 @@ jobs:
           token: ${{ secrets.GH_TOKEN }} # El token con permisos de escritura
           path: config-repo
 
-      - name: Update Kubernetes Manifest (Deployment Tag)
+      - name: Update Kubernetes Manifest (Deployment Tag) con SED
         run: |
           cd config-repo
-          # Instala yq para manipular YAML
-          sudo apt-get update && sudo apt-get install -y yq
           
-          # Actualiza el tag de la imagen en el Deployment YAML
-          yq e '.spec.template.spec.containers[0].image = "${{ secrets.DOCKER_USERNAME }}/guestbook-frontend:${{ github.sha }}"' -i k8s/frontend-deployment.yaml
+          # La imagen antigua (el marcador) debe coincidir con el valor actual en tu YAML.
+          # Asegúrate de usar tu nombre de usuario de Docker real aquí.
+          OLD_IMAGE_TAG="tu-usuario-docker/guestbook-frontend:LATEST_TAG"
+          
+          # La nueva imagen con el SHA del commit
+          NEW_IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/guestbook-frontend:${{ github.sha }}"
+          
+          # Usar sed para reemplazar el patrón antiguo por el nuevo
+          # (sed -i "s|PATRON_VIEJO|PATRON_NUEVO|g" ARCHIVO)
+          sed -i "s|${OLD_IMAGE_TAG}|${NEW_IMAGE_TAG}|g" k8s/frontend-deployment.yaml
 
       - name: Commit and Push to GitOps Repo (Trigger ArgoCD)
         run: |
