@@ -101,7 +101,7 @@ jobs:
       - name: Checkout Kubernetes Config Repo
         uses: actions/checkout@v4
         with:
-          repository: naesman1/guestbook-cicd
+          repository: naesman1/guestbook-k8s-config
           token: ${{ secrets.GH_TOKEN }} # El token con permisos de escritura
           path: config-repo
 
