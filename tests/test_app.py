@@ -22,6 +22,6 @@ def test_submit_email(client):
     """Prueba el envío del formulario de correo."""
     data = {'email': 'test@ci-cd.com'}
     response = client.post('/', data=data, follow_redirects=True)
-    
+
     assert response.status_code == 200
     pass
