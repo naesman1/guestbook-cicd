@@ -74,7 +74,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Usa el secret que configuraste
         with:
           args: >
-            -naesman1 #oganizacion
+            -Dsonar.organization=naesman1
             -Dsonar.projectKey=guestbook-cicd 
             -Dsonar.sources=app/ 
             -Dsonar.tests=tests/ 
