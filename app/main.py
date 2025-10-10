@@ -33,4 +33,3 @@ def index():
 if __name__ == '__main__': # E305 fixed here: two blank lines before this block
     # Ejecuta Flask en el puerto 5000
     app.run(host='0.0.0.0', port=5000)
-# W292 fixed: ensure there is a final newline character at the end of the file.
