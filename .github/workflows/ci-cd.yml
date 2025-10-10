@@ -18,6 +18,22 @@ jobs:
   # -------------------------------------------------------------------------
   ci:
     runs-on: ubuntu-latest
+
+    services:
+      # Nombre que usaremos para referenciar el servicio dentro del Job
+      redis:
+        # Usamos la imagen oficial de Docker Hub
+        image: redis:7-alpine
+        # Mapeamos el puerto estándar de Redis al host del Runner
+        ports:
+          - 6379:6379
+        # Necesario para que el host sea accesible por el nombre "localhost"
+        options: >
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     steps:
       - name: ⬇️ Checkout Code
         uses: actions/checkout@v4
