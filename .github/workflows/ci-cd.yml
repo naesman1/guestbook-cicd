@@ -75,7 +75,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=naesman1
-            -Dsonar.projectKey=guestbook-cicd 
+            -Dsonar.projectKey=naesman1_guestbook-cicd
             -Dsonar.sources=app/ 
             -Dsonar.tests=tests/ 
             -Dsonar.coverage.jacoco.xmlReportPaths=coverage-report.xml
