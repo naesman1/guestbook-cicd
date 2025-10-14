@@ -5,7 +5,7 @@ Se adopta la metodología **GitOps** mediante el uso de **ArgoCD** para la sincr
 
 ---
 
-## 🗂️ 1. Estructura del Proyecto y Repositorios (Entregable 1)
+## 🗂️ 1. Estructura del Proyecto y Repositorios
 
 La arquitectura de la solución se fundamenta en la separación de responsabilidades mediante la utilización de **dos repositorios distintos**:
 
@@ -24,14 +24,14 @@ Este repositorio es la **Fuente de Verdad (Source of Truth)**, siendo objeto de 
 
 ---
 
-### 🐳 Repositorio de Artefactos (Docker Hub - Entregable 2)
+### 🐳 Repositorio de Artefactos
 Es el registro donde se almacenan las imágenes Docker generadas durante la fase de Despliegue Continuo.
 
 🔗 **URL:** [https://hub.docker.com/r/naesman1/guestbook-frontend](https://hub.docker.com/r/naesman1/guestbook-frontend)
 
 ---
 
-## ⚙️ 2. Flujo de Trabajo y Pipeline de CI/CD (Entregable 3)
+## ⚙️ 2. Flujo de Trabajo y Pipeline de CI/CD 
 
 La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplicando la estrategia de ramificación **Git Flow** para la gestión del ciclo de vida del código.
 
@@ -68,9 +68,12 @@ La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplic
 
 ---
 
-## ☸️ 3. Prerrequisitos y Despliegue en K8s Local (Entregables 5, 6, 7)
+## ☸️ 3. Prerrequisitos y Despliegue en K8s Local
 
-### ⚙️ 3.1. Configuración de ArgoCD
+### ☸️ 3.1 Activar Cluster de K8s:
+  Esto es a elección del ususario (Kind, Minikube, Docker Desktop), en este caso usamos el cluster que habilita **Docker Desktop**
+
+### ⚙️ 3.2. Configuración de ArgoCD
 
 **Instalación de ArgoCD:**
 ```bash
@@ -91,7 +94,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 ---
 
-### 🌐 3.2. Acceso a la Aplicación Desplegada
+### 🌐 3.3. Acceso a la Aplicación Desplegada
 
 **Ejecución del Túnel:**
 ```bash
