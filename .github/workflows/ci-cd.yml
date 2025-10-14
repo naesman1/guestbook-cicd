@@ -4,43 +4,44 @@ name: 🚀 CI/CD - Python Guestbook
 on:
   push:
     branches:
-      - main     # La rama de producción
-      - develop  # La rama de integración
+      - main     # Despliegue de Producción (CD)
+      - develop  # Integración Continua (CI)
   pull_request:
     branches:
       - main
       - develop
   workflow_dispatch: # Permite ejecutar el pipeline manualmente
 
+env:
+  DOCKER_IMAGE_NAME: guestbook-frontend
+
 jobs:
   # -------------------------------------------------------------------------
-  # JOB 1: INTEGRACIÓN CONTINUA (CI) - Se ejecuta en todas las ramas
+  # JOB 1: INTEGRACIÓN CONTINUA (CI) - Se ejecuta en main, develop y Pull Requests
   # -------------------------------------------------------------------------
   ci:
+    name: 🧪 Continuous Integration Checks
     runs-on: ubuntu-latest
 
     services:
-      # Nombre que usaremos para referenciar el servicio dentro del Job
+      # Configura un servicio Redis temporal para las pruebas de CI
       redis:
-        # Usamos la imagen oficial de Docker Hub
         image: redis:7-alpine
-        # Mapeamos el puerto estándar de Redis al host del Runner
         ports:
           - 6379:6379
-        # Necesario para que el host sea accesible por el nombre "localhost"
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - name: ⬇️ Checkout Code
+      - name: ⬇️ Checkout Code (Full History)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Necesario para SonarCloud para analizar todo el historial
+          fetch-depth: 0 # Necesario para SonarCloud SCM y Git info
 
       - name: 🐍 Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip' # Caché de dependencias para acelerar el proceso
+          cache: 'pip'
 
       - name: 📦 Install dependencies
         run: pip install -r requirements.txt
@@ -50,93 +51,97 @@ jobs:
           pip install flake8
           flake8 app tests
 
-      # 🧪 1. Ejecutar Tests y generar el informe de cobertura (Requisito 3)
+      # 🧪 1. Ejecutar Tests y generar el informe de cobertura
       - name: 🧪 Run Tests with Coverage
+        # Usa el nombre del servicio Redis configurado arriba
+        env:
+          REDIS_HOST: localhost 
         run: |
           pip install pytest coverage
-          coverage run -m pytest tests/
+          # Usa el puerto mapeado (6379)
+          coverage run --source=app -m pytest tests/
           coverage xml -o coverage-report.xml
 
-      # 🛡️ 2. Análisis de Vulnerabilidades (Snyk - Requisito 6)
+      # 🛡️ 2. Análisis de Vulnerabilidades (Snyk)
       - name: 🛡️ Run Snyk Security Scan
         uses: snyk/actions/python-3.11@master
         env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Usa el secret que configuraste
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test
           args: --file=requirements.txt
 
-      # 📊 3. Análisis Estático de Código (SonarCloud - Requisito 5)
+      # 📊 3. Análisis Estático de Código (SonarCloud)
       - name: 📊 SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Token por defecto de GitHub (lo genera Actions)
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Usa el secret que configuraste
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
             -Dsonar.organization=naesman1
             -Dsonar.projectKey=naesman1_guestbook-cicd
-            -Dsonar.sources=app/ 
-            -Dsonar.tests=tests/ 
-            -Dsonar.coverage.jacoco.xmlReportPaths=coverage-report.xml
+            -Dsonar.sources=app/
+            -Dsonar.tests=tests/
+            -Dsonar.python.coverage.reportPaths=coverage-report.xml
+            -Dsonar.scm.disabled=true # Soluciona el error de rama en el scanner
 
   # -------------------------------------------------------------------------
-  # JOB 2: DESPLIEGUE CONTINUO (CD) - SOLO se ejecuta si la rama es MAIN/MASTER
+  # JOB 2: DESPLIEGUE CONTINUO (CD) - SOLO se ejecuta si la rama es MAIN
   # -------------------------------------------------------------------------
   deploy:
-    needs: ci # Asegura que el job de CI se haya completado exitosamente
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    name: 🚀 Continuous Deployment (MAIN Branch Only)
+    needs: ci
+    # Condición CRÍTICA: SOLO corre si el push fue a la rama 'main'
+    if: success() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+
     steps:
-      - name: ⬇️ Checkout Code (App Repo)
+      - name: ⬇️ Checkout Application Code
         uses: actions/checkout@v4
         
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
-      # 🐳 4. Publicar Artefacto (Imagen Docker - Requisito 7 y 8)
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Image
+      - name: 🏗️ Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          # Etiquetamos la imagen con el SHA del commit (inmutabilidad)
-          tags: ${{ secrets.DOCKER_USERNAME }}/guestbook-frontend:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
 
-      # ⚙️ 5. Despliegue GitOps (Actualiza el Repo de Configuración - Requisito 9)
+      # ⚙️ GitOps: Actualiza el Repositorio de Configuración
       - name: Checkout Kubernetes Config Repo
         uses: actions/checkout@v4
         with:
           repository: naesman1/guestbook-k8s-config
-          token: ${{ secrets.GH_TOKEN }} # El token con permisos de escritura
+          # Se recomienda usar un token personal (GH_TOKEN) con permisos de escritura
+          token: ${{ secrets.GH_TOKEN }} 
           path: config-repo
 
-      - name: Update Kubernetes Manifest (Deployment Tag) con SED
+      - name: 🏷️ Update Kubernetes Manifest Tag (SED)
         run: |
           cd config-repo
           
-          # La imagen antigua (el marcador) debe coincidir con el valor actual en tu YAML.
-          # Asegúrate de usar tu nombre de usuario de Docker real aquí.
-          OLD_IMAGE_TAG="tu-usuario-docker/guestbook-frontend:LATEST_TAG"
+          # 🚨 ASEGÚRATE DE REEMPLAZAR 'tu-usuario-docker' con tu usuario real
+          # Y que la cadena OLD_IMAGE_TAG coincida con el valor actual en tu k8s/frontend-deployment.yaml
+          OLD_IMAGE_PATTERN="${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:LATEST_TAG" 
+          NEW_IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}"
           
-          # La nueva imagen con el SHA del commit
-          NEW_IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/guestbook-frontend:${{ github.sha }}"
-          
-          # Usar sed para reemplazar el patrón antiguo por el nuevo
-          # (sed -i "s|PATRON_VIEJO|PATRON_NUEVO|g" ARCHIVO)
-          sed -i "s|${OLD_IMAGE_TAG}|${NEW_IMAGE_TAG}|g" k8s/frontend-deployment.yaml
+          sed -i "s|${OLD_IMAGE_PATTERN}|${NEW_IMAGE_TAG}|g" k8s/frontend-deployment.yaml
 
-      - name: Commit and Push to GitOps Repo (Trigger ArgoCD)
+      - name: ⬆️ Commit and Push to GitOps Repo (Trigger ArgoCD)
         run: |
           cd config-repo
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add k8s/frontend-deployment.yaml
-          git commit -m "chore(cd): Update frontend image tag to ${{ github.sha }}" || echo "No changes to commit"
+          # Añadimos --allow-empty para que el job no falle si la etiqueta ya está actualizada
+          git commit --allow-empty -m "chore(cd): Update frontend image tag to ${{ github.sha }}" 
           git push
