@@ -24,13 +24,6 @@ Este repositorio es la **Fuente de Verdad (Source of Truth)**, siendo objeto de 
 
 ---
 
-### 🐳 Repositorio de Artefactos
-Es el registro donde se almacenan las imágenes Docker generadas durante la fase de Despliegue Continuo.
-
-🔗 **URL:** [https://hub.docker.com/r/naesman1/guestbook-frontend](https://hub.docker.com/r/naesman1/guestbook-frontend)
-
----
-
 ## ⚙️ 2. Flujo de Trabajo y Pipeline de CI/CD 
 
 La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplicando la estrategia de ramificación **Git Flow** para la gestión del ciclo de vida del código.
@@ -106,9 +99,13 @@ Username: admin
 
 Password: *La contraseña que obtuviste anteriormente del secret de Kubernetes*
 
+![Login ArgoCD](images/argo-user.png)
+
 **🚀 Creación de la Aplicación guestbook-app en ArgoCD**
 
 Una vez dentro de la interfaz web, debes hacer clic en el botón `+ NEW APP` en la esquina superior izquierda.
+
+![Crear app en ArgoCD](images/argo-new.png)
 
 Para *General* ponemos: 
 
@@ -182,15 +179,17 @@ kind delete cluster --name kind
 | # | Entregable | Estado | Enlace / Ubicación |
 |---|-------------|---------|--------------------|
 | 1 | Enlace al Repositorio de Código | ✅ Completado | [https://github.com/naesman1/guestbook-cicd.git](https://github.com/naesman1/guestbook-cicd.git) |
-| 2 | Repositorio de Artefactos (Docker Hub) | ✅ Completado | [https://hub.docker.com/r/naesman1/guestbook-frontend](https://hub.docker.com/r/naesman1/guestbook-frontend) |
-| 3 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
-| 4 | Screenshots del Pipeline de CI/CD | ⏳ Pendiente | Pestaña **Actions** en GitHub |
-| 5 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
-| 6 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
-| 7 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
-| 8 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
-| 9 | Proyecto en Snyk o GitGuardian | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
-| 10 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
+| 2 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
+| 3 | Screenshots del Pipeline de CI/CD | ⏳ Pendiente | Pestaña **Actions** en GitHub |
+| 4 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
+| 5 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
+|   | |![App desplegada](images/app.png) ||
+| 6 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
+| 7 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
+|   | |![Proyecto en SonarCloud](images/sonar.png) ||
+| 8 | Proyecto en Snyk | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
+|   | |![Proyecto en snyk](images/snyk.png) ||
+| 9 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
 
 ---
 
