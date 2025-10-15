@@ -116,6 +116,8 @@ Para *General* ponemos:
 | Project | default | El proyecto por defecto de ArgoCD.  |
 | Sync Policy | Automatic  | Sincronización automática |
 
+![ArgoCD app general](images/argo-general.png)
+
 Configuración de *Source*
 
 | Campo | Valor | Propósito  |
@@ -124,6 +126,8 @@ Configuración de *Source*
 | Revision | main | La rama (o etiqueta) que debe usar como fuente de verdad. Para producción, usa main.  |
 | Path | k8s  | Crítico: Es la subcarpeta dentro del repositorio donde se encuentran todos tus archivos .yaml (frontend-deployment.yaml, etc.). |
 
+![ArgoCD app source](images/argo-source.png)
+
 Configuración de *Directory*
 
 | Campo | Valor | Propósito |
@@ -131,7 +135,9 @@ Configuración de *Directory*
 | Cluster URL | https://kubernetes.default.svc | Clúster Local: Si estás usando Kind o Docker Desktop K8s, este valor (el clúster interno) es el correcto. |
 | Namespace | default | El namespace donde se crearán tus Deployments y Services.  |
 
-Despues de llenar estos campos clic en `CREATE`
+![ArgoCD app directory](images/argo-directory.png)
+
+Despues de llenar estos campos clic en `CREATE` en la parte superior izquierda
 
 
 ---
@@ -180,11 +186,13 @@ kind delete cluster --name kind
 |---|-------------|---------|--------------------|
 | 1 | Enlace al Repositorio de Código | ✅ Completado | [https://github.com/naesman1/guestbook-cicd.git](https://github.com/naesman1/guestbook-cicd.git) |
 | 2 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
-| 3 | Screenshots del Pipeline de CI/CD | ⏳ Pendiente | Pestaña **Actions** en GitHub |
+| 3 | Screenshots del Pipeline de CI/CD | ✅ Completado | Pestaña **Actions** en GitHub |
+|   | |![Pipeline](images/pipeline.png) | CI Workflow  [Ver log](logs/CI-log.txt) <br> CD Workflow  [Ver log](logs/CD-log.txt)|
 | 4 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
 | 5 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
 |   | |![App desplegada](images/app.png) ||
 | 6 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
+|   | |![App ArgoCD](images/argo-proyecto.png) ||
 | 7 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
 |   | |![Proyecto en SonarCloud](images/sonar.png) ||
 | 8 | Proyecto en Snyk | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
