@@ -1,7 +1,28 @@
+![CICD](images/cicd.png)
 # 🧩 Documentación del Pipeline CI/CD: Implementación GitOps con ArgoCD
 
 El presente proyecto establece un flujo integral de **Integración Continua (CI)** y **Despliegue Continuo (CD)** para una aplicación *Guestbook* desarrollada en **Python/Flask**.  
 Se adopta la metodología **GitOps** mediante el uso de **ArgoCD** para la sincronización automática del estado del clúster de Kubernetes (K8s) con la configuración declarativa contenida en un repositorio de manifiestos dedicado.
+
+---
+
+## 📑 Índice
+
+1. [🗂️ Estructura del Proyecto y Repositorios](#️-1-estructura-del-proyecto-y-repositorios)  
+   1.1 [📘 Repositorio de Código Fuente (`guestbook-cicd`)](#-repositorio-de-código-fuente-guestbook-cicd)  
+   1.2 [🧾 Repositorio de Manifiestos (`guestbook-k8s-config`)](#-repositorio-de-manifiestos-gitops---guestbook-k8s-config)  
+2. [⚙️ Flujo de Trabajo y Pipeline de CI/CD](#️-2-flujo-de-trabajo-y-pipeline-de-cicd)  
+   2.1 [🔀 Descripción de la Lógica Git Flow](#-21-descripción-de-la-lógica-git-flow)  
+   2.2 [🧩 Etapas del Pipeline](#-22-etapas-del-pipeline-githubworkflowsci-cdyml)  
+   2.3 [📡 Ejecución y Monitorización del Workflow](#-23-ejecución-y-monitorización-del-workflow)  
+3. [☸️ Prerrequisitos y Despliegue en K8s Local](#️-3-prerrequisitos-y-despliegue-en-k8s-local)  
+   3.1 [Activar Cluster de K8s](#️-31-activar-cluster-de-k8s)  
+   3.2 [Configuración de ArgoCD](#-32-configuración-de-argocd)  
+   3.3 [🌐 Acceso a la Aplicación Desplegada](#-33-acceso-a-la-aplicación-desplegada)  
+4. [🧹 Apagar o Eliminar la Aplicación](#-4-apagar-o-eliminar-la-aplicación)  
+   4.1 [✅ Remoción Mediante GitOps](#-41-remoción-mediante-gitops-procedimiento-recomendado)  
+   4.2 [🧨 Terminación del Clúster Local](#-42-terminación-del-clúster-local)  
+5. [📋 Resumen y Listado de Entregables](#-5-resumen-y-listado-de-entregables)
 
 ---
 
@@ -186,19 +207,20 @@ kind delete cluster --name kind
 |---|-------------|---------|--------------------|
 | 1 | Enlace al Repositorio de Código | ✅ Completado | [https://github.com/naesman1/guestbook-cicd.git](https://github.com/naesman1/guestbook-cicd.git) |
 | 2 | Enlace al Repositorio del artefacto | ✅ Completado | [https://hub.docker.com/repository/docker/mikenarbikes/guestbook-frontend/general](https://hub.docker.com/repository/docker/mikenarbikes/guestbook-frontend/general)  |
-| 2 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
-| 3 | Screenshots del Pipeline de CI/CD | ✅ Completado | Pestaña **Actions** en GitHub |
+|   | |![Artefacto](images/docker-hub.png) ||
+| 3 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
+| 4 | Screenshots del Pipeline de CI/CD | ✅ Completado | Pestaña **Actions** en GitHub |
 |   | |![Pipeline](images/pipeline.png) | CI Workflow  [Ver log](logs/CI-log.txt) <br> CD Workflow  [Ver log](logs/CD-log.txt)|
-| 4 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
-| 5 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
+| 5 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
+| 6 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
 |   | |![App desplegada](images/app.png) ||
-| 6 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
+| 7 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
 |   | |![App ArgoCD](images/argo-proyecto.png) ||
-| 7 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
+| 8 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
 |   | |![Proyecto en SonarCloud](images/sonar.png) ||
-| 8 | Proyecto en Snyk | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
+| 9 | Proyecto en Snyk | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
 |   | |![Proyecto en snyk](images/snyk.png) ||
-| 9 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
+| 10 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
 
 ---
 
