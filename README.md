@@ -121,8 +121,8 @@ Para *General* ponemos:
 
 Configuración de *Source*
 
-| Campo | Valor | Propósito |
-|-------|-------|-----------|
+| Campo | Valor | Propósito  |
+|-------|-------|------------|
 | Repository URL | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) | La URL de tu repositorio de manifiestos GitOps. |
 | Revision | main | La rama (o etiqueta) que debe usar como fuente de verdad. Para producción, usa main.  |
 | Path | k8s  | Crítico: Es la subcarpeta dentro del repositorio donde se encuentran todos tus archivos .yaml (frontend-deployment.yaml, etc.). |
