@@ -82,6 +82,39 @@ La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplic
 
 ---
 
+Comandos recomendados para hacer push desde PowerShell (Windows)
+
+- Preparar commits en `develop` y hacer push (CI):
+
+```powershell
+# Agregar y commitear cambios
+git add .
+git commit -m "Tu mensaje de commit"
+
+# Push a la rama develop
+git push origin develop
+```
+
+- Fusionar `develop` en `main` localmente y hacer push (dispara CD):
+
+```powershell
+# Asegurarse de estar en develop y traer últimos cambios
+git checkout develop
+git pull origin develop
+
+# Cambiar a main y traer últimos cambios
+git checkout main
+git pull origin main
+
+# Fusionar develop en main
+git merge --no-ff develop -m "Merge branch 'develop' into main"
+
+# Push a la rama main (dispara el job de deploy)
+git push origin main
+```
+
+---
+
 ## ☸️ 3. Prerrequisitos y Despliegue en K8s Local
 
 ### ☸️ 3.1 Activar Cluster de K8s:
