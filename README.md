@@ -89,7 +89,7 @@ Comandos recomendados para hacer push desde PowerShell (Windows)
 ```powershell
 # Agregar y commitear cambios
 git add .
-git commit -m "Tu mensaje de commit"
+git commit -m "Prueba CI"
 
 # Push a la rama develop
 git push origin develop
