@@ -30,14 +30,14 @@ Se adopta la metodología **GitOps** mediante el uso de **ArgoCD** para la sincr
 
 La arquitectura de la solución se fundamenta en la separación de responsabilidades mediante la utilización de **dos repositorios distintos**:
 
-### 📘 Repositorio de Código Fuente (`guestbook-cicd`)
+### 📘 1.1 Repositorio de Código Fuente (`guestbook-cicd`)
 Contiene el código Python, el sistema de gestión de dependencias (`requirements.txt`), las unidades de prueba y el `Dockerfile`.
 
 🔗 **URL:** [https://github.com/naesman1/guestbook-cicd.git](https://github.com/naesman1/guestbook-cicd.git)
 
 ---
 
-### 🧾 Repositorio de Manifiestos (GitOps - `guestbook-k8s-config`)
+### 🧾 1.2 Repositorio de Manifiestos (GitOps - `guestbook-k8s-config`)
 Constituye el repositorio declarativo de los manifiestos de Kubernetes (`frontend-deployment.yaml`, `redis-service.yaml`, etc.).  
 Este repositorio es la **Fuente de Verdad (Source of Truth)**, siendo objeto de monitorización constante por parte de **ArgoCD**.
 
