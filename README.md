@@ -81,24 +81,71 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
+**Hacemos un portforwarding para poder abrir ArgoCD en nuestro navegador**
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
 **Obtención de la Contraseña Inicial:**
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
 
-**Creación de la Aplicación GitOps (Manifiestos de Kubernetes):**
+**Acceso a la Interfaz Web**
+Mientras el comando de *kubectl port-forward* se esté ejecutando (debe permanecer abierto en tu terminal), abre tu navegador y navega a la siguiente dirección:
+```
+https://localhost:8080
+```
 
-- **Destination Server:** `https://kubernetes.default.svc`  
-- **Repository URL:** [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git)  
-- **Path:** `k8s`
+⚠️ Notas Importantes:
+Certificado de Seguridad: El navegador te mostrará una advertencia de seguridad (certificado autofirmado). Debes aceptar la advertencia y continuar para poder acceder.
+
+Credenciales: Usa las credenciales de administrador:
+
+Username: admin
+
+Password: *La contraseña que obtuviste anteriormente del secret de Kubernetes*
+
+**🚀 Creación de la Aplicación guestbook-app en ArgoCD**
+
+Una vez dentro de la interfaz web, debes hacer clic en el botón `+ NEW APP` en la esquina superior izquierda.
+
+Para *General* ponemos: 
+
+
+| Campo | Valor | Propósito |
+|-------|-------|-----------|
+| Application Name  | guestbook-app | El nombre que aparecerá en la interfaz de ArgoCD. |
+| Project | default | El proyecto por defecto de ArgoCD.  |
+| Sync Policy | Automatic  | Sincronización automática |
+
+Configuración de *Source*
+
+| Campo | Valor | Propósito  |
+|-------|-------|------------|
+| Repository URL | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) | La URL de tu repositorio de manifiestos GitOps. |
+| Revision | main | La rama (o etiqueta) que debe usar como fuente de verdad. Para producción, usa main.  |
+| Path | k8s  | Crítico: Es la subcarpeta dentro del repositorio donde se encuentran todos tus archivos .yaml (frontend-deployment.yaml, etc.). |
+
+Configuración de *Directory*
+
+| Campo | Valor | Propósito |
+|-------|-------|-----------|
+| Cluster URL | https://kubernetes.default.svc | Clúster Local: Si estás usando Kind o Docker Desktop K8s, este valor (el clúster interno) es el correcto. |
+| Namespace | default | El namespace donde se crearán tus Deployments y Services.  |
+
+Despues de llenar estos campos clic en `CREATE`
+
 
 ---
 
 ### 🌐 3.3. Acceso a la Aplicación Desplegada
 
+En una terminal nueva para no cerrar el tunel de ArgoCD
+
 **Ejecución del Túnel:**
 ```bash
-kubectl port-forward svc/guestbook-frontend 8088:5000
+kubectl port-forward svc/guestbook-frontend 8088:80
 ```
 
 **Acceso Web:**  
@@ -139,10 +186,10 @@ kind delete cluster --name kind
 | 3 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
 | 4 | Screenshots del Pipeline de CI/CD | ⏳ Pendiente | Pestaña **Actions** en GitHub |
 | 5 | Manifiestos de Kubernetes | ✅ Completado | [https://github.com/naesman1/guestbook-k8s-config.git](https://github.com/naesman1/guestbook-k8s-config.git) |
-| 6 | Enlace/Screenshot de la Aplicación Desplegada | ⏳ Pendiente | [http://localhost:8088](http://localhost:8088) |
-| 7 | Enlace/Screenshot del Proyecto en ArgoCD | ⏳ Pendiente | [https://localhost:8080](https://localhost:8080) |
-| 8 | Proyecto en SonarCloud | ⏳ Pendiente | `Tu URL de SonarCloud` |
-| 9 | Proyecto en Snyk o GitGuardian | ⏳ Pendiente | `Tu URL de Snyk` o logs de GitHub Actions |
+| 6 | Enlace/Screenshot de la Aplicación Desplegada | ✅ Completado | [http://localhost:8088](http://localhost:8088) |
+| 7 | Enlace/Screenshot del Proyecto en ArgoCD | ✅ Completado | [https://localhost:8080](https://localhost:8080) |
+| 8 | Proyecto en SonarCloud |  ✅ Completado | [https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd](https://sonarcloud.io/project/overview?id=naesman1_guestbook-cicd) |
+| 9 | Proyecto en Snyk o GitGuardian | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
 | 10 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
 
 ---
