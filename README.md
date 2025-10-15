@@ -185,6 +185,7 @@ kind delete cluster --name kind
 | # | Entregable | Estado | Enlace / Ubicación |
 |---|-------------|---------|--------------------|
 | 1 | Enlace al Repositorio de Código | ✅ Completado | [https://github.com/naesman1/guestbook-cicd.git](https://github.com/naesman1/guestbook-cicd.git) |
+| 2 | Enlace al Repositorio del artefacto | ✅ Completado | [https://hub.docker.com/repository/docker/mikenarbikes/guestbook-frontend/general](https://hub.docker.com/repository/docker/mikenarbikes/guestbook-frontend/general)  |
 | 2 | Fichero de Configuración del Pipeline | ✅ Completado | `.github/workflows/ci-cd.yml` |
 | 3 | Screenshots del Pipeline de CI/CD | ✅ Completado | Pestaña **Actions** en GitHub |
 |   | |![Pipeline](images/pipeline.png) | CI Workflow  [Ver log](logs/CI-log.txt) <br> CD Workflow  [Ver log](logs/CD-log.txt)|
