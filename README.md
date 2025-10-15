@@ -257,6 +257,6 @@ kind delete cluster --name kind
 
 ---
 
-📘 **Autor:** [@naesman1](https://github.com/naesman1)  
+📘 **Autor:** [@naesman1](https://github.com/naesman1)  - Miguel Ángel Narvaiz 
 🕓 **Última actualización:** Octubre 2025  
 🚀 **Stack:** Python · Flask · Docker · Kubernetes · ArgoCD · GitHub Actions · SonarCloud · Snyk
