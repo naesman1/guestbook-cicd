@@ -158,14 +158,14 @@ Configuración de *Directory*
 
 ![ArgoCD app directory](images/argo-directory.png)
 
-Despues de llenar estos campos clic en `CREATE` en la parte superior izquierda
+Después de llenar estos campos da clic en `CREATE` en la parte superior izquierda
 
 
 ---
 
 ### 🌐 3.3. Acceso a la Aplicación Desplegada
 
-En una terminal nueva para no cerrar el tunel de ArgoCD
+En una terminal nueva para no cerrar el túnel de ArgoCD
 
 **Ejecución del Túnel:**
 ```bash
