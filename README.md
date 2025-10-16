@@ -69,33 +69,40 @@ La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplic
 
 ---
 
-### 📡 2.3. Ejecución y Monitorización del Workflow
+### 📡 2.3. Ejecución y monitorización del workflow
 
-- **Ejecución de CI (Desarrollo):**  
-  Un `git push` a la rama `develop` inicia la ejecución del pipeline de CI.  
-  Se puede monitorear desde la pestaña **Actions** en GitHub para verificar la finalización del job `ci`.
+- **Ejecución de CI (Desarrollo):**
+   - Un `git push` a la rama `develop` inicia el pipeline de CI. Además, los Pull Requests contra `develop` o `main` también disparan la ejecución (el workflow escucha `pull_request`).
+   - Se puede monitorear desde la pestaña **Actions** en GitHub y revisar el job `ci` (Checkout, Set up Python, Install dependencies, Lint, Tests, Snyk, SonarCloud).
 
-- **Ejecución de CD (Despliegue):**  
-  Se activa al fusionar `develop` → `main` y hacer `git push origin main`.  
-  Luego del job `deploy`, verificar en **ArgoCD** que la app `guestbook-app` transite los estados:  
-  `Synced → Progressing → Healthy`.
+- **Ejecución de CD (Despliegue):**
+   - El job `deploy` está condicionado a ejecutarse solo en la rama `main` y solo si `ci` finaliza correctamente. En el workflow esto está controlado por `needs: ci` y `if: github.ref == 'refs/heads/main'`.
+   - El despliegue se produce al fusionar `develop` → `main` y hacer `git push origin main`. Tras el deploy, verifica en **ArgoCD** que `guestbook-app` transite los estados: `Synced → Progressing → Healthy`.
 
 ---
 
-Comandos recomendados para hacer push desde PowerShell (Windows)
+Comandos recomendados y atajos útiles (PowerShell)
 
-- Preparar commits en `develop` y hacer push (CI):
+- Forzar un trigger sin cambiar archivos (commit vacío):
 
 ```powershell
-# Agregar y commitear cambios
+# Crea un commit vacío y lo empuja a la rama actual
+git commit --allow-empty -m "ci: trigger workflow test"
+git push origin HEAD
+```
+
+- Push típico para CI (ejecutar en `develop`):
+
+```powershell
+# Añadir y commitear cambios
 git add .
-git commit -m "Prueba CI"
+git commit -m "feat: cambios para CI"
 
 # Push a la rama develop
 git push origin develop
 ```
 
-- Fusionar `develop` en `main` localmente y hacer push (dispara CD):
+- Flujo para lanzar CD (fusionar develop → main y empujar):
 
 ```powershell
 # Asegurarse de estar en develop y traer últimos cambios
