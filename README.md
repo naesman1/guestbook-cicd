@@ -76,7 +76,7 @@ La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplic
    - Se puede monitorear desde la pestaña **Actions** en GitHub y revisar el job `ci` (Checkout, Set up Python, Install dependencies, Lint, Tests, Snyk, SonarCloud).
 
 - **Ejecución de CD (Despliegue):**
-   - El job `deploy` está condicionado a ejecutarse solo en la rama `main` y solo si `ci` finaliza correctamente. En el workflow esto está controlado por `needs: ci` y `if: github.ref == 'refs/heads/main'`.
+   - El job `deploy` está condicionado a ejecutarse solo en la rama `main` y solo si `ci` finaliza correctamente. 
    - El despliegue se produce al fusionar `develop` → `main` y hacer `git push origin main`. Tras el deploy, verifica en **ArgoCD** que `guestbook-app` transite los estados: `Synced → Progressing → Healthy`.
 
 ---
@@ -87,7 +87,7 @@ Comandos recomendados y atajos útiles (PowerShell)
 
 ```powershell
 # Crea un commit vacío y lo empuja a la rama actual
-git commit --allow-empty -m "ci: trigger workflow test"
+git commit --allow-empty -m "CI test"
 git push origin HEAD
 ```
 
@@ -114,7 +114,7 @@ git checkout main
 git pull origin main
 
 # Fusionar develop en main
-git merge --no-ff develop -m "Merge branch 'develop' into main"
+git merge --no-ff develop -m "Fusiona rama 'develop' con main"
 
 # Push a la rama main (dispara el job de deploy)
 git push origin main
@@ -135,14 +135,14 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
-**Hacemos un portforwarding para poder abrir ArgoCD en nuestro navegador**
-```bash
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
 **Obtención de la Contraseña Inicial:**
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+```
+
+**Hacemos un portforwarding para poder abrir ArgoCD en nuestro navegador**
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
 ```
 
 **Acceso a la Interfaz Web**
