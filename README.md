@@ -80,46 +80,25 @@ La orquestación del proceso CI/CD se realiza mediante **GitHub Actions**, aplic
    - El despliegue se produce al fusionar `develop` → `main` y hacer `git push origin main`. Tras el deploy, verifica en **ArgoCD** que `guestbook-app` transite los estados: `Synced → Progressing → Healthy`.
 
 ---
+Podemos hacer la siguiente secuencia en github actions para correr el workflow directo en main o develop de forma grafica: 
 
-Comandos recomendados y atajos útiles (PowerShell)
+   - 1. Ir a `Actions`
+   - 2. Seleccionar `CI/CD - Python Guestbook`
+   - 3. Clic en el botón `Run workflow`
+   - 4. Seleccionar `main`para este caso (podemos usar develop solo para hacer un "dry run") y `Run Workflow`
 
-- Forzar un trigger sin cambiar archivos (commit vacío):
+   ![GH-Actions](images/gh-actions.png)
 
-```powershell
-# Crea un commit vacío y lo empuja a la rama actual
-git commit --allow-empty -m "CI test"
-git push origin HEAD
-```
+- **Monitorización del CI/CD:**
 
-- Push típico para CI (ejecutar en `develop`):
-
-```powershell
-# Añadir y commitear cambios
-git add .
-git commit -m "feat: cambios para CI"
-
-# Push a la rama develop
-git push origin develop
-```
-
-- Flujo para lanzar CD (fusionar develop → main y empujar):
-
-```powershell
-# Asegurarse de estar en develop y traer últimos cambios
-git checkout develop
-git pull origin develop
-
-# Cambiar a main y traer últimos cambios
-git checkout main
-git pull origin main
-
-# Fusionar develop en main
-git merge --no-ff develop -m "Fusiona rama 'develop' con main"
-
-# Push a la rama main (dispara el job de deploy)
-git push origin main
-```
-
+Seleccionamos el job para poder monitorizar el proceso de ambos job hasta que terminen
+   - Seleccionamos el job
+   
+   ![GH-Actions-jobs](images/gh-jobs-1.png)
+   - Observamos el proceso
+   ![GH-Actions-jobs](images/gh-jobs-2.png)
+   - Hasta que los dos jobs esten correctos
+   ![GH-Actions-jobs](images/gh-jobs-3.png)
 ---
 
 ## ☸️ 3. Prerrequisitos y Despliegue en K8s Local
