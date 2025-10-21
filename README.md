@@ -93,7 +93,7 @@ Podemos hacer la siguiente secuencia en github actions para correr el workflow d
 
 Seleccionamos el job para poder monitorizar el proceso de ambos job hasta que terminen
    - Seleccionamos el job
-   
+
    ![GH-Actions-jobs](images/gh-jobs-1.png)
    - Observamos el proceso
    ![GH-Actions-jobs](images/gh-jobs-2.png)
@@ -239,7 +239,8 @@ kind delete cluster --name kind
 |   | |![Proyecto en SonarCloud](images/sonar.png) ||
 | 9 | Proyecto en Snyk | ✅ Completado | [https://app.snyk.io/org/naesman1/projects](https://app.snyk.io/org/naesman1/projects) |
 |   | |![Proyecto en snyk](images/snyk.png) ||
-| 10 | Vídeo Explicativo en YouTube | ⏳ Pendiente | `Tu enlace de YouTube` |
+| 10 | Vídeo Explicativo en YouTube | ✅ Completado | https://youtu.be/3nKroAu7g6s | (https://youtu.be/3nKroAu7g6s)
+|   | |![video](images/portada.png) ||
 
 ---
 
